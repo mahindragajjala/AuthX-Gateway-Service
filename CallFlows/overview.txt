@@ -41,3 +41,9 @@ JWT-SERVER SERVICES
                                     "refresh_token": "xyzabc..."
                                   }
                   
+MODERN APPLICATIONS USING
+                         Component         Real-World Example                 
+                         Auth Server       Auth0 Universal Login              
+                         JWT Server        Auth0 / Firebase / Google Identity 
+                         DB Verification   PostgreSQL + bcrypt                
+                         Token Protection  OAuth2 + PKCE + JWK                
