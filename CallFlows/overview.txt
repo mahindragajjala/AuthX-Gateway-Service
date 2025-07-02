@@ -1,1 +1,43 @@
-....
+AUTH SERVER SERVICES
+                  Input Validation
+                  Ensure required fields (username/password) are present.
+                  Sanitize input (to prevent injection attacks).
+                  Database Lookup
+                  Query: SELECT * FROM users WHERE username = 'mahindra'
+                  Get hashed password from DB.
+                  Password Hash Verification
+                  Hash input password with same hashing algorithm (e.g., bcrypt).
+                  Compare hashed input with DB value.
+                  ✅ If valid → authenticated.
+
+🔐 Optionally: External Identity Providers (IdPs)
+Instead of local DB, the Auth server may delegate credential verification to:
+LDAP / Active Directory
+OAuth2 Providers (Google, GitHub, etc.)
+SAML Identity Providers
+This is useful for enterprise apps using SSO (Single Sign-On) or federated identity.
+
+
+
+JWT-SERVER SERVICES
+                  Authenticate the Auth Server
+                                Checks Authorization header or TLS certificate
+                  
+                  Create JWT Payload
+                  Includes claims like:
+                                        sub: Subject (user ID)
+                                        iat: Issued at
+                                        exp: Expiry
+                                        aud: Audience
+                                        scope: What the token can access
+                  
+                  Sign the Token
+                                  Using RS256 (private key), HMAC, or ES256
+                                  Private key is stored only on JWT server
+                                  Respond with the Token
+                                  {
+                                    "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...",
+                                    "expires_in": 3600,
+                                    "refresh_token": "xyzabc..."
+                                  }
+                  
