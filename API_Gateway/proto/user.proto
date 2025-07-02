@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "apigateway/proto";
+
+service UserService {
+  rpc SendUser(UserRequest) returns (UserResponse);
+  rpc SignupUser(SignupRequest) returns (SignupResponse);
+}
+
+message UserRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message UserResponse {
+  string message = 1;
+}
+
+message SignupRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message SignupResponse {
+  string message = 1;
+  string error = 2;
+}

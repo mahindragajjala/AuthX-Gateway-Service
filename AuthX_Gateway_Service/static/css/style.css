@@ -1,0 +1,67 @@
+body {
+  background: #3a86ff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.form-box h2 {
+  margin-bottom: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 0.6rem;
+  margin: 0.6rem 0;
+  background: #1e4ed8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.facebook {
+  background: #3b5998;
+}
+
+button.google {
+  background: #ffffff;
+  color: #000;
+  border: 1px solid #ccc;
+}
+
+a {
+  color: #1e4ed8;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.divider {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #888;
+}

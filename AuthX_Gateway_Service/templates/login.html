@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="icon" href="/static/images/favicon.ico">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="form-container">
+    <form action="/login" method="POST" class="form-box">
+      <h2>Login</h2>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <a href="#">Forgot password?</a>
+      <button type="submit">Login</button>
+      <p>Don't have an account? <a href="/signup">Signup</a></p>
+      <div class="divider">Or</div>
+      <button class="facebook">Login with Facebook</button>
+      <button class="google">Login with Google</button>
+    </form>
+  </div>
+</body>
+</html>
