@@ -1,0 +1,141 @@
+
+AUTHENTICATION TEST CASES
+SECTION 1: SIGNUP FUNCTIONAL TEST CASES
+
+
+TC-SIGNUP-01: Signup with valid email and password
+- Input: email=test@example.com, password=Pass@123
+- Expected: 201 Created, JWT returned
+
+TC-SIGNUP-02: Signup with empty email
+- Input: email="", password=Pass@123
+- Expected: 400 Bad Request, "email required"
+
+TC-SIGNUP-03: Signup with empty password
+- Input: email=test@example.com, password=""
+- Expected: 400 Bad Request, "password required"
+
+TC-SIGNUP-04: Signup with invalid email format
+- Input: email=test@, password=Pass@123
+- Expected: 400 Bad Request, "invalid email format"
+
+TC-SIGNUP-05: Signup with weak password
+- Input: email=test@example.com, password=123
+- Expected: 400 Bad Request, "password too weak"
+
+TC-SIGNUP-06: Signup with already registered email
+- Input: email=existing@example.com
+- Expected: 409 Conflict, "email already exists"
+
+TC-SIGNUP-07: Signup with missing fields in JSON
+- Input: Only password provided
+- Expected: 400 Bad Request
+
+
+SECTION 2: LOGIN FUNCTIONAL TEST CASES
+
+
+TC-LOGIN-01: Login with valid credentials
+- Input: email=test@example.com, password=Pass@123
+- Expected: 200 OK, JWT returned
+
+TC-LOGIN-02: Login with incorrect password
+- Input: email=test@example.com, password=wrongpass
+- Expected: 401 Unauthorized, "invalid credentials"
+
+TC-LOGIN-03: Login with non-existent email
+- Input: email=nouser@example.com
+- Expected: 404 Not Found, "user not found"
+
+TC-LOGIN-04: Login with missing password
+- Input: email=test@example.com
+- Expected: 400 Bad Request, "password required"
+
+TC-LOGIN-05: Login with missing email
+- Input: password=Pass@123
+- Expected: 400 Bad Request, "email required"
+
+TC-LOGIN-06: Login with invalid email format
+- Input: email=bad-email, password=Pass@123
+- Expected: 400 Bad Request
+
+
+SECTION 3: JWT TOKEN TEST CASES
+
+
+JWT-01: Generate token on successful login
+- Expected: JWT returned with claims and expiry
+
+JWT-02: Decode and verify token
+- Expected: Claims contain userID, email, iat, exp
+
+JWT-03: Use expired token
+- Expected: 401 Unauthorized, "token expired"
+
+JWT-04: Use tampered token
+- Expected: 401 Unauthorized, "invalid token"
+
+JWT-05: Missing token on protected route
+- Expected: 401 Unauthorized, "authorization required"
+
+JWT-06: Token without 'Bearer' prefix
+- Expected: 401 Unauthorized
+
+JWT-07: Token with missing claims
+- Expected: 401 Unauthorized
+
+JWT-08: Token signed with wrong secret
+- Expected: 401 Unauthorized
+
+JWT-09: Blacklisted token used
+- Expected: 401 Unauthorized or Forbidden
+
+
+SECTION 4: gRPC SERVICE TEST CASES
+
+
+GRPC-01: SignupUser with valid input
+- Expected: Success message + status OK
+
+GRPC-02: SignupUser with existing email
+- Expected: Error: AlreadyExists
+
+GRPC-03: SignupUser with invalid JSON input
+- Expected: Error: InvalidArgument
+
+GRPC-04: LoginUser with valid credentials
+- Expected: JWT token returned in response
+
+GRPC-05: LoginUser with wrong password
+- Expected: Error: Unauthenticated
+
+GRPC-06: LoginUser with non-existent email
+- Expected: Error: NotFound
+
+GRPC-07: Call protected method without token
+- Expected: Error: Unauthenticated
+
+GRPC-08: Call protected method with valid token
+- Expected: Status OK, user data returned
+
+GRPC-09: Call protected method with expired token
+- Expected: Error: Unauthenticated
+
+GRPC-10: Call protected method with tampered token
+- Expected: Error: Unauthenticated
+
+GRPC-11: Authorization header without 'Bearer' prefix
+- Expected: Error: Unauthenticated
+
+GRPC-12: No metadata headers in context
+- Expected: Error: Unauthenticated
+
+
+SECTION 5: LOAD & STRESS TESTING SUGGESTIONS
+
+
+- Simulate 50+ concurrent signups/logins using k6 or Locust
+- Expect response times < 500ms
+- No server 500 errors or timeouts under stress
+- JWT token creation/validation must scale under burst load
+- DB connection pool and rate limiter should be stress tested
