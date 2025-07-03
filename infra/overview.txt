@@ -1,0 +1,36 @@
+ Component                    EC2 Name         Protocol       Port  
+ Client (web/mobile)          (external user)  HTTP           80    
+ API Gateway (Go + Gin)       `api-gateway`    HTTP           80    
+ AuthService (Go + gRPC)      `auth-service`   gRPC (HTTP/2)  50051 
+ PostgreSQL User DB           `pg-db`          PostgreSQL     5432  
+ MongoDB Session Logs         `mongo-db`       MongoDB        27017 
+ JWT Service (Token Handler)  `jwt-service`    gRPC or HTTP   6000  
+
+
+
+authx-infra/
+├── main.tf           # VPC, Subnet, SG
+├── instances.tf      # EC2 instances
+├── variables.tf      # Input config
+├── outputs.tf        # Print IPs and IDs
+
+
+
+
+
+aws configure
+
+
+or 
+
+using the env
+export AWS_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+export AWS_SECRET_ACCESS_KEY="YOUR_SECRET_KEY"
+export AWS_DEFAULT_REGION="us-east-1"
+
+
+  after that 
+provider "aws" {
+  region = var.aws_region
+}
+
