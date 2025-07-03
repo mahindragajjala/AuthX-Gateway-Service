@@ -1,6 +1,8 @@
 provider "aws" {
-  region = "us-east-1"
+  region  = var.aws_region
+  profile = "default"  # or your profile name like "authx-dev"
 }
+
 
 resource "aws_vpc" "authx_vpc" {
   cidr_block = "10.0.0.0/16"
