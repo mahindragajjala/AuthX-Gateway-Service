@@ -1,5 +1,5 @@
 # AuthX Gateway Service
-- Developing:) 
+Developing:) 
 
 ## Project Overview
 
