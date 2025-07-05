@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Signup | HEY MAMA!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="icon" href="/static/images/favicon.ico" />
+
+  <script>
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      window.location.href = "/dashboard";
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #fceabb, #f8b500);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .form-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .form-container h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #f8b500;
+      font-size: 1.8rem;
+    }
+
+    .form-box label {
+      display: block;
+      margin: 0.5rem 0 0.2rem;
+      font-weight: 500;
+    }
+
+    .form-box input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    .form-box input:focus {
+      border-color: #f8b500;
+    }
+
+    .form-box button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #f8b500;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form-box button:hover {
+      background-color: #e1a200;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: red;
+    }
+
+    .form-container p {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .form-container a {
+      color: #f8b500;
+      text-decoration: none;
+    }
+
+    .form-container a:hover {
+      text-decoration: underline;
+    }
+
+    #refresh-timer {
+      margin-top: 10px;
+      text-align: center;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <h2>HEY MAMA! Signup</h2>
+    <form id="signupForm" class="form-box" novalidate>
+      <label for="email">Email:</label>
+      <input type="email" id="email" required placeholder="Enter your email" />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" required placeholder="Enter your password" minlength="6" />
+
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" id="confirm_password" required placeholder="Re-enter your password" />
+
+      <button type="submit">Sign Up</button>
+      <div id="message"></div>
+    </form>
+    <div id="refresh-timer"></div>
+    <p>Already have an account? <a href="/login">Login</a></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("signupForm");
+    const msg = document.getElementById("message");
+    const timerDiv = document.getElementById("refresh-timer");
+
+    function sanitize(input) {
+      return input.replace(/[<>&'"]/g, "");
+    }
+
+    function showRefreshTimer(expirySeconds) {
+      let remaining = expirySeconds;
+
+      const updateTimer = () => {
+        const days = Math.floor(remaining / (60 * 60 * 24));
+        const hours = Math.floor((remaining % (60 * 60 * 24)) / 3600);
+        const minutes = Math.floor((remaining % 3600) / 60);
+        const seconds = remaining % 60;
+
+        timerDiv.textContent = `Refresh Token expires in: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+        if (remaining > 0) {
+          remaining--;
+        } else {
+          timerDiv.textContent = "Refresh token expired. Please log in again.";
+        }
+      };
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    const defaultRefreshExpirySeconds = 7 * 24 * 60 * 60; // 7 days
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      msg.textContent = "";
+
+      const email = sanitize(document.getElementById("email").value.trim());
+      const password = sanitize(document.getElementById("password").value);
+      const confirm_password = sanitize(document.getElementById("confirm_password").value);
+
+      if (password !== confirm_password) {
+        msg.textContent = "Passwords do not match.";
+        return;
+      }
+
+      if (password.length < 6) {
+        msg.textContent = "Password must be at least 6 characters long.";
+        return;
+      }
+
+      try {
+        const res = await fetch("/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password, confirm_password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.access_token) {
+          localStorage.setItem("accessToken", data.access_token);
+          if (data.refresh_token) {
+            localStorage.setItem("refreshToken", data.refresh_token);
+          }
+
+          const refreshExpiry = data.refresh_expires_in || defaultRefreshExpirySeconds;
+          showRefreshTimer(refreshExpiry);
+
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 3000);
+        } else {
+          msg.textContent = data.error || "Signup failed. Try again.";
+        }
+      } catch (error) {
+        msg.textContent = "Server error. Please try again later.";
+      }
+    });
+  </script>
+</body>
+</html>
