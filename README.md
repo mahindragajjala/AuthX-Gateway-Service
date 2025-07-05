@@ -1,3 +1,39 @@
+# AuthX Gateway Service
+- Developing:) 
+
+## 🔐 Project Overview
+
+**AuthX Gateway Service** is a secure, scalable authentication gateway built in **Go (Golang)** that provides robust login, registration, and token-based access to microservices using modern tech stacks like **JWT**, **gRPC**, **PostgreSQL**, and **MongoDB**.
+
+The gateway acts as the **entry point** for users and services, enforcing authentication and authorization policies while supporting both REST and gRPC protocols.
+
+---
+
+## 🚀 Features
+
+- ✅ **User Authentication & Registration**
+  - REST and gRPC APIs for login and signup
+  - Password hashing and validation
+
+- 🔑 **JWT-Based Authorization**
+  - Access and refresh tokens
+  - Role-based token claims (admin, user, etc.)
+  - Secure middleware for route protection
+
+- 📡 **gRPC + REST Interfaces**
+  - Dual API support for broader service communication
+  - Easy integration with modern and legacy services
+
+- 🛢 **Dual Database Architecture**
+  - **PostgreSQL** for persistent user data (users, roles, credentials)
+  - **MongoDB** for session data, token logs, and audit trails
+
+- 🐳 **Dockerized Microservice**
+  - Ready for containerized deployment
+  - Compatible with **Kubernetes**, **Docker Compose**, and CI/CD pipelines
+
+---
+
 ![image](https://github.com/user-attachments/assets/82d3769c-a555-45a1-a203-df6a432dc510)
 
 <img width="935" alt="image" src="https://github.com/user-attachments/assets/2875ebe4-372b-452b-9efa-6d21d621128e" />
